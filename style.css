@@ -1,0 +1,32 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: #C3A634;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #C3A634;
+}
+::-webkit-scrollbar-thumb {
+    background: #eeeeee;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+
+#side-tab a.btnApply {
+    position: fixed;
+    left: -2px;
+    top:33%;
+    height: 100px;
+    width: 40px;
+    }
+
