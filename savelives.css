@@ -1,0 +1,106 @@
+/* FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+/* font-family: 'Lato', sans-serif; */
+@font-face {
+  font-family: DogeSans-Regular;
+  src: url(font/DogeSans-Regular.otf);
+}
+body{
+  margin:0px;
+  padding:0px;
+}
+a:link {
+  color: #fff;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #eeeeee;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+#main{
+  background: #000;
+  height:auto;
+  padding-bottom:200px;
+  padding: 20px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+  margin: 0 auto;
+}
+#main #title{
+  font-family: 'DogeSans-Regular', sans-serif;
+  text-align:center;
+  font-size:2.5rem;
+  color:white !important;
+  padding-top:0px;
+}
+
+#main #img-div #img-caption{
+  color: #fffffe;
+  font-size:12px;
+  font-family: 'DogeSans-Regular', sans-serif;
+  text-align: center;
+}
+
+#tribute-info{
+  color:#a7a9be;
+  font-size:20px;
+  text-align:center;
+  font-family: 'DogeSans-Regular', sans-serif;
+  
+}
+#tribute-info p{
+  padding-left: 20px;
+  padding-right: 20px;
+  
+}
+
+#tribute-link{
+  font-size:14px;
+  background: #f25f4c;
+  padding:20px;
+  outline:none;
+  text-decoration:none;
+  border-radius:60px;
+  color:#fff;
+  font-weight:600;
+  padding-left:70px;
+  padding-right:70px;
+}
+#main #title svg{
+  height:30px;
+  color:rgb(190, 40, 40);
+  font-weight:bold;
+  position:relative;
+  transition: all 0.5s ease;
+}
+
+#main #title svg:hover{
+  transition: all 0.5s ease;
+  margin-bottom:20px;
+}
+
+#tribute-link:hover{
+  background: rgb(114, 20, 20)f !important;
+  opacity:0.9;
+}
+
+.wrapper{
+  height: 100vh;
+  z-index: 9999;
+}
