@@ -1,5 +1,0 @@
-
-      <script src="https://www.cryptohopper.com/widgets/js/script"></script>
-      <div class="cryptohopper-web-widget" data-id="7" data-text_color="#ffffff" data-background_color="#c3a634" data-coins="dogecoin" data-numcoins="1" data-realtime="on" data-ticker_position="anywhere" data-ticker_speed="90"></div>
-
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?forceLang=en&tracking=1&thirdparty=1&always=1&top=1"></script>
