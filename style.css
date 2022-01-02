@@ -1,0 +1,50 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+html{
+    scroll-behavior: smooth;
+}
+.side-tab{
+    position: fixed;
+    left: -2px;
+    top:33%;
+    height: 100px;
+    width: 40px;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #C3A634;
+}
+::-webkit-scrollbar-thumb {
+    background: #eeeeee;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+body {
+    background: #C3A634;
+}
+
+  @font-face {
+    font-family: DogeSans-Regular;
+    src: url(font/DogeSans-Regular.otf);
+  }
+  @import "https://fonts.googleapis.com/css?family=Roboto";
+  .cryptoboxes .mcw-label {
+    display: inline-flex;
+    font-family: DogeSans-Regular,Roboto;
+  }
+
+  @media (max-width: 1100px) {
+    .side-tab{
+        display: none;
+    }
+}
+
+
+
