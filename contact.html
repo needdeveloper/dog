@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="contact.css" />
+    <link rel="icon" href="img/favicon.png" type="images/x-icon" />
+    <title>Contact</title>
+  </head>
+  <script src="https://unpkg.com/@botpoison/browser" async></script>
+  <body>
+    <div class="container">
+      <form
+        id="contact"
+        action="https://submit-form.com/KvIyww1u"
+        method="POST"
+        data-botpoison-public-key="pk_2479cc12-f4f4-459c-b314-ff20d693d500"
+      >
+        <h3>Quick Contact</h3>
+        <h4>Contact me today, and get reply with in 24 hours!</h4>
+        <label>
+          Your email:
+          <input type="email" id="email" name="email" required="" />
+        </label>
+        <label>
+          Your message:
+          <textarea name="message"></textarea>
+        </label>
+
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"></script>
+    <script src="https://baronwatts.com/scripts/LegacyJSONLoader.js"></script>
+    <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- https://github.com/a-jie/threejs-geometry-modifiers -->
+    <script src="http://baronwatts.com/scripts/modifier.js"></script>
+  </body>
+  <script>
+    const randnum = (min, max) => Math.round(Math.random() * (max - min) + min);
+
+    //===================================================== scene
+    var scene = new THREE.Scene();
+
+    var camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      100000
+    );
+    camera.position.set(1, 0.5, 4);
+    camera.lookAt(scene.position);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMapSoft = true; // Shadow
+    renderer.shadowMapType = THREE.PCFShadowMap; //Shadow
+    document.body.appendChild(renderer.domElement);
+
+    //===================================================== add front & back lighting
+    var light = new THREE.DirectionalLight(new THREE.Color("gray"), 0.5);
+    light.position.set(1, 1, 1).normalize();
+    scene.add(light);
+
+    //===================================================== resize
+    window.addEventListener("resize", function () {
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    });
+
+    //===================================================== model
+    var geometry = new THREE.BoxBufferGeometry(0.5, 1, 0.5);
+    /* We change the pivot point to be at the bottom of the cube, instead of its center. So we translate the whole geometry. */
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
+    var material = new THREE.MeshNormalMaterial({
+      transparent: true,
+      opacity: 0,
+    });
+    mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    var light = new THREE.DirectionalLight(new THREE.Color("white"), 0.5);
+    light.position.set(0, 1, 0);
+    light.castShadow = true;
+    light.target = mesh; //shadow will follow mesh
+    mesh.add(light);
+
+    //===================================================== add Model
+    var mixers = [];
+    var clip1;
+    var clip2;
+    var clip3;
+
+    var loader = new THREE.GLTFLoader();
+    loader.load(
+      "https://raw.githubusercontent.com/baronwatts/models/master/astronaut.glb",
+      function (object) {
+        object.scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh) {
+            node.castShadow = true;
+            node.material.side = THREE.DoubleSide;
+          }
+        });
+
+        var player = object.scene;
+        player.position.set(0, -0.2, 0);
+        player.scale.set(0.25, 0.25, 0.25);
+        mesh.add(player);
+
+        /*  var lightPlayer = new THREE.PointLight(new THREE.Color('wheat'), 10, .5);
+  mesh.add(lightPlayer);*/
+
+        //flag light
+        var pointflagLight = new THREE.PointLight(
+          new THREE.Color("gold"),
+          1,
+          5
+        );
+        pointflagLight.position.set(0, 0, 0);
+        mesh.add(pointflagLight);
+
+        var mixer = new THREE.AnimationMixer(player);
+        clip1 = mixer.clipAction(object.animations[0]);
+        clip2 = mixer.clipAction(object.animations[1]);
+        clip1.play();
+        mixers.push(mixer);
+      }
+    );
+
+    var particle = new THREE.Object3D();
+    scene.add(particle);
+    for (var i = 0; i < 1000; i++) {
+      var stars = new THREE.Mesh(
+        new THREE.TetrahedronGeometry(2, 0),
+        new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          shading: THREE.FlatShading,
+        })
+      );
+      stars.position
+        .set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+        .normalize();
+      stars.position.multiplyScalar(90 + Math.random() * 700);
+      stars.rotation.set(
+        Math.random() * 2,
+        Math.random() * 2,
+        Math.random() * 2
+      );
+      particle.add(stars);
+    }
+
+    //=========================================================================================== flag
+    var geometry = new THREE.BoxBufferGeometry(0.15, 2, 0.15);
+    /* We change the pivot point to be at the bottom of the cube, instead of its center. So we translate the whole geometry. */
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 1, 0));
+    var material = new THREE.MeshNormalMaterial({
+      transparent: true,
+      opacity: 0,
+    });
+    flagLocation = new THREE.Mesh(geometry, material);
+    scene.add(flagLocation);
+    flagLocation.position.x = -1;
+
+    flagLocation.rotateY(Math.PI);
+
+    //flag pole
+    var geometry = new THREE.CylinderGeometry(0.03, 0.03, 4, 32);
+    var material = new THREE.MeshPhongMaterial({
+      color: new THREE.Color("gray"),
+    });
+    var cylinder = new THREE.Mesh(geometry, material);
+    cylinder.geometry.center();
+    cylinder.castShadow = true;
+    flagLocation.add(cylinder);
+
+    //flag
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.crossOrigin = "";
+
+    var texture = textureLoader.load(
+      "https://raw.githubusercontent.com/baronwatts/images/master/dogeflag4.png"
+    );
+    plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(600, 430, 20, 20, true),
+      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide })
+    );
+    plane.scale.set(0.0025, 0.0025, 0.0025);
+    plane.position.set(0, 1.5, 0);
+    plane.position.x = 0.75;
+    plane.castShadow = true;
+
+    flagLocation.add(plane);
+    addModifier(plane);
+
+    //flag wave animation
+    var modifier, cloth;
+
+    function addModifier(mesh) {
+      modifier = new ModifierStack(mesh);
+      cloth = new Cloth(3, 0);
+      cloth.setForce(0.2, -0.2, -0.2);
+    }
+    modifier.addModifier(cloth);
+    cloth.lockXMin(0);
+    computeNormals: false;
+
+    //===================================================== model
+    //model credit https://sketchfab.com/JayDesigns
+    var loader = new THREE.LegacyJSONLoader();
+    loader.load(
+      "https://raw.githubusercontent.com/baronwatts/models/master/moon.js",
+      function (geometry, materials) {
+        var model = new THREE.Mesh(geometry, materials);
+        model.scale.set(1, 1, 1);
+        model.receiveShadow = true;
+        model.position.y = -5;
+        scene.add(model);
+      }
+    );
+
+    //===================================================== model
+    //model credit https://sketchfab.com/ryankingart
+    var loader = new THREE.LegacyJSONLoader();
+    loader.load(
+      "https://raw.githubusercontent.com/baronwatts/models/master/rocketship.js",
+      function (geometry, materials) {
+        var model = new THREE.Mesh(geometry, materials);
+        model.scale.set(1, 1, 1);
+        model.castShadow = true;
+        model.position.x = 1;
+        model.position.y = -0.3;
+        model.position.z = -1;
+        scene.add(model);
+      }
+    );
+
+    //===================================================== model
+    //model credit https://www.cgtrader.com/3dmoder
+    var loader = new THREE.LegacyJSONLoader();
+    loader.load(
+      "https://raw.githubusercontent.com/baronwatts/models/master/satellite.js",
+      function (geometry, materials) {
+        var model = new THREE.Mesh(geometry, materials);
+        model.scale.set(0.5, 0.5, 0.5);
+        model.rotateX(Math.PI / 1.5);
+        model.rotateZ(Math.PI / 3);
+        model.position.z = -5;
+        particle.add(model);
+      }
+    );
+
+    var height = 0.015;
+    var geometry = new THREE.CylinderGeometry(0.05, 0.05, height, 32);
+    var material = new THREE.MeshLambertMaterial({ color: 0xffff00 });
+    var cylinder = new THREE.Mesh(geometry, material);
+    cylinder.position.z = 0.3;
+    cylinder.position.y = -0.18;
+    scene.add(cylinder);
+
+    var clone = cylinder.clone();
+    clone.position.z = 0.5;
+    clone.position.y = -0.2;
+    clone.rotateZ(Math.PI / 2);
+    clone.rotateX(Math.PI / 2);
+    scene.add(clone);
+
+    //===================================================== add sky particles
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.crossOrigin = ""; //allow cross origin loading
+
+    const imageSrc = textureLoader.load(
+      "https://raw.githubusercontent.com/baronwatts/models/master/snowflake.png"
+    );
+    const shaderPoint = THREE.ShaderLib.points;
+
+    uniforms = THREE.UniformsUtils.clone(shaderPoint.uniforms);
+    uniforms.map.value = imageSrc;
+
+    var matts = new THREE.PointsMaterial({
+      size: 2,
+      color: new THREE.Color("white"),
+      map: uniforms.map.value,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      transparent: true,
+      opacity: 0.75,
+    });
+
+    var geo = new THREE.Geometry();
+    for (var i = 0; i < 1000; i++) {
+      var star = new THREE.Vector3();
+      geo.vertices.push(star);
+    }
+
+    var sparks = new THREE.Points(geo, matts);
+    sparks.scale.set(1, 1, 1);
+    scene.add(sparks);
+
+    sparks.geometry.vertices.map((d, i) => {
+      d.y = randnum(30, 40);
+      d.x = randnum(-500, 500);
+      d.z = randnum(-500, 500);
+    });
+
+    //===================================================== 3rd person view
+    var followCam = new THREE.Object3D();
+    followCam.position.copy(camera.position);
+    scene.add(followCam);
+    followCam.parent = mesh;
+    function updateCamera() {
+      if (followCam) {
+        camera.position.lerp(
+          followCam.getWorldPosition(new THREE.Vector3()),
+          0.05
+        );
+        camera.lookAt(mesh.position.x, mesh.position.y + 0.5, mesh.position.z);
+      }
+    }
+
+    //===================================================== mouse
+    var mouseX = 0;
+    var mouseY = 0;
+    var zoomIn = 150;
+    document.addEventListener("mousemove", onDocumentMouseMove, false);
+    function onDocumentMouseMove(event) {
+      mouseX = (event.clientX - window.innerWidth / 2) / zoomIn;
+      mouseY = (event.clientY - window.innerHeight / 2) / zoomIn;
+    }
+
+    //===================================================== animate
+    var clock = new THREE.Clock();
+    var lastTime;
+    (function animate() {
+      requestAnimationFrame(animate);
+      updateCamera();
+      renderer.render(scene, camera);
+
+      let delta = clock.getDelta();
+      mixers.map((x) => x.update(delta));
+
+      //move mouse
+      camera.position.x += (mouseX - camera.position.x) * 0.05;
+      camera.position.y += (mouseY - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
+
+      //particle
+      particle.rotation.y += 0.0005;
+
+      //flag
+      modifier && modifier.apply();
+    })();
+  </script>
+</html>
